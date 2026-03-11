@@ -24,24 +24,11 @@ export async function POST(req: NextRequest) {
     .find((m) => m.role === "user");
   const currentUserMessage = lastUser?.content ?? "";
 
-  const systemMessage = `
-
-Crypto greeting rule:
-
-- "GM" means good morning in Web3.
-- "GRitual" is a Ritual community greeting.
-
-Only use "GRitual" when the user explicitly greets with "GRitual".
-Do NOT use it automatically when someone asks about Ritual.
-When the user asks a direct question (e.g. "What is Ritual?"),
-always answer the question clearly instead of greeting.`;
-
   try {
     const client = await Client.connect("henrydeaaron/siggy");
 
     const result = await client.predict("/respond", {
       message: currentUserMessage,
-      system_message: systemMessage,
       personality_mode: personality,
       max_tokens,
       temperature,
