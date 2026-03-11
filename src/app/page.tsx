@@ -20,6 +20,8 @@ export default function Home() {
   const [personality, setPersonality] = useState("Gatekeeper");
   const [loading, setLoading] = useState(false);
   const chatRef = useRef<HTMLDivElement | null>(null);
+  const personalityClass =
+    "personality-" + personality.toLowerCase().replace(/\s+/g, "-");
 
   async function sendMessage(e: React.FormEvent) {
     e.preventDefault();
@@ -77,12 +79,18 @@ export default function Home() {
   }, [messages, loading]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top,#2b1f4a_0,#05010d_55%,#000000_100%)] text-slate-100">
-      <div className="w-full max-w-6xl px-4 py-10">
-        <div className="rounded-[28px] border border-violet-500/40 bg-slate-950/80 shadow-[0_0_70px_rgba(139,92,246,0.8)] backdrop-blur-2xl p-7">
-          <div className="flex items-start justify-between gap-6 mb-6">
+    <div className="siggy-bg min-h-screen flex items-center justify-center text-slate-100 overflow-hidden">
+      <div className="w-full max-w-6xl h-screen px-4 py-4">
+        <div
+          className={`siggy-shell flex h-full flex-col rounded-[28px] border border-violet-500/40 bg-slate-950/80 shadow-[0_0_70px_rgba(139,92,246,0.8)] backdrop-blur-2xl p-6 md:p-7 ${personalityClass}`}
+        >
+          <div className="flex items-start justify-between gap-6 mb-4 md:mb-6">
             <div className="flex gap-4 items-center">
-              <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-300 via-violet-400 to-emerald-300 shadow-[0_0_35px_rgba(244,114,182,0.9)] flex items-center justify-center overflow-hidden">
+              <div
+                className={`relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-300 via-violet-400 to-emerald-300 shadow-[0_0_35px_rgba(244,114,182,0.9)] flex items-center justify-center overflow-hidden ${
+                  loading ? "siggy-avatar-loading" : ""
+                }`}
+              >
                 <Image
                   src="/siggy.png"
                   alt="Siggy Ritual Mascot"
@@ -136,7 +144,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3 mb-5 text-xs">
+          <div className="flex flex-wrap gap-3 mb-4 md:mb-5 text-xs">
             <div className="flex flex-col gap-1">
               <span className="uppercase tracking-[0.18em] text-[10px] text-slate-400">
                 Siggy Personality
@@ -155,7 +163,7 @@ export default function Home() {
 
           <div
             ref={chatRef}
-            className="siggy-scroll h-[26rem] md:h-[34rem] overflow-y-auto rounded-2xl border border-slate-700/80 bg-gradient-to-b from-slate-950/90 to-slate-900/90 p-4 space-y-3 text-sm"
+            className="siggy-scroll flex-1 overflow-y-auto rounded-2xl border border-slate-700/80 bg-gradient-to-b from-slate-950/90 to-slate-900/90 p-4 space-y-3 text-sm"
           >
             {messages.length === 0 && (
               <div className="text-xs text-slate-400">
@@ -166,11 +174,11 @@ export default function Home() {
             {messages.map((m, i) => {
               const isUser = m.role === "user";
               const bubbleBase =
-                "max-w-[80%] rounded-2xl px-3 py-2 text-sm";
+                "siggy-bubble max-w-[80%] rounded-2xl px-3 py-2 text-sm";
               const userBubble =
-                "bg-gradient-to-br from-emerald-400/20 to-violet-400/20 border border-emerald-300/50 whitespace-pre-wrap";
+                "siggy-bubble-user bg-gradient-to-br from-emerald-400/20 to-violet-400/20 border border-emerald-300/50 whitespace-pre-wrap";
               const assistantBubble =
-                "bg-gradient-to-br from-violet-500/20 to-slate-800/90 border border-violet-400/60";
+                "siggy-bubble-assistant bg-gradient-to-br from-violet-500/20 to-slate-800/90 border border-violet-400/60";
 
               const isHtml =
                 !isUser && m.content.trim().startsWith("<");
@@ -200,24 +208,28 @@ export default function Home() {
               );
             })}
             {loading && (
-              <div className="text-[11px] text-violet-200 flex items-center gap-2">
-                <span className="inline-flex h-2 w-2 rounded-full bg-violet-300 animate-pulse" />
-                Siggy is consulting the Ritual oracles…
+              <div className="flex justify-start">
+                <div className="siggy-bubble siggy-bubble-assistant inline-flex items-center gap-2 px-3 py-2 text-[11px]">
+                  <span className="siggy-typing-dot" />
+                  <span className="siggy-typing-dot siggy-typing-dot-delay-1" />
+                  <span className="siggy-typing-dot siggy-typing-dot-delay-2" />
+                  <span className="opacity-80">Siggy is consulting the Ritual oracles…</span>
+                </div>
               </div>
             )}
           </div>
 
-          <form onSubmit={sendMessage} className="mt-4 flex items-center gap-2">
+          <form onSubmit={sendMessage} className="mt-3 md:mt-4 flex items-center gap-3">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Speak your Ritual into existence..."
-              className="flex-1 bg-slate-950/80 border border-slate-700/80 rounded-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/80"
+              className="siggy-input flex-1 bg-slate-950/80 border border-slate-700/80 rounded-full px-3 py-2 text-sm focus:outline-none"
             />
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 text-xs font-semibold disabled:opacity-50"
+              className="siggy-button px-5 py-2 rounded-full text-xs font-semibold disabled:opacity-50"
             >
               {loading ? "Channeling..." : "Cast"}
             </button>
