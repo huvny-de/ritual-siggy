@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type Role = "user" | "assistant";
 type Message = { role: Role; content: string };
@@ -198,10 +200,16 @@ export default function Home() {
                         className="prose prose-invert prose-sm max-w-none"
                         dangerouslySetInnerHTML={{ __html: m.content }}
                       />
-                    ) : (
-                      <span className={isUser ? "" : "whitespace-pre-wrap"}>
+                    ) : isUser ? (
+                      <span className="whitespace-pre-wrap">
                         {m.content}
                       </span>
+                    ) : (
+                      <div className="prose prose-invert prose-sm max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {m.content}
+                        </ReactMarkdown>
+                      </div>
                     )}
                   </div>
                 </div>
