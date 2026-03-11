@@ -82,8 +82,14 @@ export default function Home() {
         <div className="rounded-[28px] border border-violet-500/40 bg-slate-950/80 shadow-[0_0_70px_rgba(139,92,246,0.8)] backdrop-blur-2xl p-7">
           <div className="flex items-start justify-between gap-6 mb-6">
             <div className="flex gap-4 items-center">
-              <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-300 via-violet-400 to-emerald-300 shadow-[0_0_35px_rgba(244,114,182,0.9)] flex items-center justify-center text-3xl">
-                😼
+              <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-300 via-violet-400 to-emerald-300 shadow-[0_0_35px_rgba(244,114,182,0.9)] flex items-center justify-center overflow-hidden">
+                <Image
+                  src="/siggy.png"
+                  alt="Siggy Ritual Mascot"
+                  fill
+                  sizes="64px"
+                  className="object-cover"
+                />
               </div>
               <div className="flex-1">
                 <div className="flex items-baseline gap-2 flex-wrap">
